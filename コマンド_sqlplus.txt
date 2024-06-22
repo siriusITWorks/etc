@@ -1,0 +1,66 @@
+★おまじない：
+set pagesize 0;
+set linesize 999;
+set trim on;
+
+set linesize <表示幅>;
+col <カラム名> format aXX;
+
+spool パス名;
+
+set markup csv on;
+
+★insertなどで文字化けするとき
+-- cmdより、文字コードと環境変数を変更する
+chcp 65001
+SET NLS_LANG=Japanese_Japan.AL32UTF8
+
+-- oracleの文字コード確認
+SELECT * FROM NLS_DATABASE_PARAMETERS WHERE PARAMETER='NLS_CHARACTERSET';
+
+★確認SQL
+-- ユーザー存在確認
+select * from all_users;
+
+-- 自分の情報を確認
+select * from user_users;
+
+-- PDBの確認(DBAユーザーのみ可能）
+show pdbs
+
+★接続
+-- dbaユーザー接続(ユーザー入力時に下記）
+sys/<パスワード> as sysdba;
+
+-- リスナー経由
+sqlplus <ユーザ名>/<パスワード>@<サービス名>
+
+
+★CDB、PDB関係
+-- 接続中コンテナの確認(CDBかPDBの確認)
+show con_name
+
+-- コンテナ情報の確認(DBAユーザーのみ可能)
+show pdbs
+
+-- CDB、PDB間の切り替え
+alter session set container=XEPDB1;
+alter session set container=CDB$ROOT;
+
+
+★パスワードの有効期限関係
+-- ユーザロック状態を確認
+select username || '/' || account_status from dba_users order by username;
+
+-- ロックの解除
+alter user <ユーザ名> account unlock;
+
+-- パスワード再設定
+alter user <ユーザ名> identified by <新しいPW>
+
+-- デフォルトのパスワード期限を無期限にする
+alter profile default limit password_life_time unlimited;
+
+
+
+
